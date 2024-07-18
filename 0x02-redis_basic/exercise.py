@@ -15,6 +15,7 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     '''call_history decorator'''
     @wraps(method)
@@ -25,6 +26,20 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(method.__qualname__ + ":outputs", str(result))
         return result
     return wrapper
+
+
+def replay(func: Callable) -> None:
+    '''display the history of calls of a particular function'''
+    r = redis.Redis()
+    func_name = func.__qualname__
+    count = r.get(func_name).decode('utf-8')
+    print(f"{func_name} was called {count} times:")
+    inputs = r.lrange(func_name + ":inputs", 0, -1)
+    outputs = r.lrange(func_name + ':outputs', 0, -1)
+    for input, output in zip(inputs, outputs):
+        print(f"{func_name}(*{input.decode('utf-8')})\
+               -> {output.decode('utf-8')}")
+
 
 class Cache:
     '''Cache class'''
