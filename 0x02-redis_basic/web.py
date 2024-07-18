@@ -40,4 +40,3 @@ def get_page(url: str) -> str:
     return r.content.decode('utf-8')
 
 
-get_page('http://slowwly.robertomurray.co.uk')
