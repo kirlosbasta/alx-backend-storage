@@ -11,10 +11,11 @@ def web_cache(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(self, url: str) -> str:
         '''wrapper method'''
-        result = self._redis.get(url)
+        r = redis.Redis()
+        result = r.get(url)
         if result is None:
             result = fn(self, url)
-            self._redis.setex(url, 10, result)
+            r.setex(url, 10, result)
         return result
     return wrapper
 
@@ -24,8 +25,9 @@ def count_calls(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(self, url: str) -> str:
         '''wrapper method'''
+        r = redis.Redis()
         key = "count:{}".format(url)
-        self._redis.incr(key, 1)
+        r.incr(key, 1)
         return fn(self, url)
     return wrapper
 
@@ -36,3 +38,6 @@ def get_page(url: str) -> str:
     '''return HTML webpage'''
     r = requests.get(url)
     return r.content.decode('utf-8')
+
+
+get_page('http://slowwly.robertomurray.co.uk')
