@@ -1,19 +1,16 @@
-#!/usr/bin/env python3
-""" Main file """
+url = 'https://intranet.alxswe.com/projects/1234#task-11668'
+get_page(url)
+get_page(url)
+get_page(url)
+get_page(url)
+get_page(url)
+print(f'Count: {r.get("count:{}".format(url)).decode("utf-8")}')
+# begin = time.time()
+# get_page(url)
+# end = time.time()
+# print('Time before cache: {}'.format(end - begin))
 
-Cache = __import__('exercise').Cache
-
-cache = Cache()
-
-s1 = cache.store("first")
-print(s1)
-s2 = cache.store("secont")
-print(s2)
-s3 = cache.store("third")
-print(s3)
-
-inputs = cache._redis.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
-outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
-
-print("inputs: {}".format(inputs))
-print("outputs: {}".format(outputs))
+# begin = time.time()
+# get_page(url)
+# end = time.time()
+# print('Time After cache: {}'.format(end - begin))
