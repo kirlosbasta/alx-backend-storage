@@ -11,11 +11,10 @@ def web_cache(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(self, url: str) -> str:
         '''wrapper method'''
-        key = "cached:{}".format(url)
-        result = self._redis.get(key)
+        result = self._redis.get(url)
         if result is None:
             result = fn(self, url)
-            self._redis.setex(key, 10, result)
+            self._redis.setex(url, 10, result)
         return result
     return wrapper
 
