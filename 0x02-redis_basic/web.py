@@ -28,7 +28,7 @@ def count_calls(fn: Callable) -> Callable:
     def wrapper(url: str) -> str:
         '''wrapper method'''
         key = "count:{}".format(url)
-        r.incr(key, 1)
+        r.incr(key)
         return fn(url)
     return wrapper
 
